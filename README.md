@@ -1,7 +1,6 @@
 # MicroParamOsc Arduino Library
 
 Binds `MicroParam` instances to Open Sound Control (OSC) addresses for sending and receiving OSC messages.
-
 Namespace: global
 
 ## Functions
@@ -120,5 +119,4 @@ Checks if the type tags hash matches the given hash. `hash` (`uint32_t`) is the 
 bool match = paramBinding.matchesTypeTags( tags);
 ```
 Checks if the type tags match the given string. `tags` (`const char *`) is the type tags to compare. Returns `true` if the type tags match.
-
 
