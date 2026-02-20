@@ -1,0 +1,35 @@
+{
+  "name": "MicroParamOsc",
+  "version": "0.0.1",
+  "description": "Micro Arduino Library that binds MicroParam instances to Open Sound Control (OSC) addresses for sending and receiving OSC messages.",
+  "keywords": "Communication, OSC, Open Sound Control, Parameter, MicroParam",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomasfredericks/MicroParamOsc.git"
+  },
+  "authors": [
+    {
+      "name": "Thomas Fredericks",
+      "url": "https://github.com/thomasfredericks",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/thomasfredericks/MicroParam",
+  "dependencies": [
+    {
+      "name": "MicroCommon",
+      "version": "https://github.com/thomasfredericks/MicroCommon.git"
+    } ,
+    {
+      "name": "MicroOsc",
+      "version": "https://github.com/thomasfredericks/MicroOsc.git"
+    } ,
+    {
+      "name": "MicroParam",
+      "version": "https://github.com/thomasfredericks/MicroParam.git"
+    }
+  ],
+  "frameworks": "*",
+  "platforms": "*"
+}

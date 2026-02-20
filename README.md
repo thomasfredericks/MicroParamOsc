@@ -1,7 +1,59 @@
 # MicroParamOsc Arduino Library
 
-Binds `MicroParam` instances to Open Sound Control (OSC) addresses for sending and receiving OSC messages.
-Namespace: global
+Micro Arduino Library that binds `MicroParam` instances to `MicroOsc` Open Sound Control (OSC) addresses for sending and receiving OSC messages.
+
+- Source code : https://github.com/thomasfredericks/MicroParamOsc
+- `MicroParam` : https://github.com/thomasfredericks/MicroParam
+- `MicroOsc` : https://github.com/thomasfredericks/MicroOsc
+
+
+## Basic Example
+
+```cpp
+#include <Arduino.h>
+#include <MicroParam.h>
+#include <MicroParamOsc.h>
+#include <MicroOscSlip.h>
+
+// Create an OSC instance with buffer size 128 for incoming messages
+MicroOscSlip<128> myOsc(&Serial);
+
+// Create a single input parameter
+MicroParamInt input_a(0, 0, 127);
+
+// Bind the input parameter to an OSC address
+MicroParamBindOsc inputs[] = {
+    {"/input/a", "i", input_a},
+};
+const size_t inputsCount = sizeof(inputs) / sizeof(MicroParamBindOsc);
+
+// Function called when an OSC message is received
+void myOscMessageParser(MicroOsc &source, MicroOscMessage &msg)
+{
+    // If successfully updated input parameter from OSC message, return
+    if (microParamOscDispatch(msg, inputs, inputsCount)) return;
+
+    // Other message types
+    if (msg.checkOscAddress("/?"))
+    {
+        // Send current input values back when queried
+        microParamOscSend(myOsc, inputs, inputsCount);
+    }
+}
+
+void setup()
+{
+    Serial.begin(115200);
+}
+
+void loop()
+{
+    // Handle incoming OSC messages
+    myOsc.onOscMessageReceived(myOscMessageParser);
+
+}
+
+```
 
 ## Functions
 
