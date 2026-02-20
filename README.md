@@ -2,6 +2,8 @@
 
 Binds `MicroParam` instances to Open Sound Control (OSC) addresses for sending and receiving OSC messages.
 
+Namespace: global
+
 ## Functions
 
 ### microParamOscDispatch
@@ -32,16 +34,16 @@ Sends multiple bindings' parameters via OSC. `osc` (`MicroOsc &`) is the OSC ins
 #### Constructor(s)
 
 ```cpp
-MicroParamOscBind myStructOrClassName(address, typeTags, param);
+MicroParamOscBind paramBinding(address, typeTags, param);
 ```
 Constructs a binding for a single parameter. `address` (`const char *`) is the OSC address for this binding, `typeTags` (`const char *`) is the OSC type tags describing parameter types, and `param` (`MicroParam &`) is the reference to the parameter being bound.
 
 ```cpp
-MicroParamOscBind myStructOrClassName(address, typeTags, paramArray);
+MicroParamOscBind paramBinding(address, typeTags, paramArray);
 ```
 Constructs a binding for an array of parameters. `address` (`const char *`) is the OSC address for this binding, `typeTags` (`const char *`) is the OSC type tags describing parameter types, and `paramArray` (`MicroParam **`) is the array of pointers to parameters being bound.
 
-#### Method generateHash
+#### Method generateHash (static)
 
 ```cpp
 uint32_t hash = MicroParamOscBind.generateHash( s);
@@ -51,71 +53,72 @@ Generates a hash for a given string using FNV-1a. `s` (`const char *`) is the st
 #### Method getAddress
 
 ```cpp
-const char *addr = myStructOrClassName.getAddress();
+const char *address = paramBinding.getAddress();
 ```
 Returns the OSC address for this binding. Returns the address (`const char *`).
 
 #### Method getAddressHash
 
 ```cpp
-uint32_t hash = myStructOrClassName.getAddressHash();
+uint32_t hash = paramBinding.getAddressHash();
 ```
 Returns the hash of the OSC address. Returns the hash value (`uint32_t`).
 
 #### Method getTypeTags
 
 ```cpp
-const char *tags = myStructOrClassName.getTypeTags();
+const char *tags = paramBinding.getTypeTags();
 ```
 Returns the OSC type tags for this binding. Returns the type tags (`const char *`).
 
 #### Method getTypeTagsHash
 
 ```cpp
-uint32_t hash = myStructOrClassName.getTypeTagsHash();
+uint32_t hash = paramBinding.getTypeTagsHash();
 ```
 Returns the hash of the OSC type tags. Returns the hash value (`uint32_t`).
 
 #### Method getCount
 
 ```cpp
-size_t count = myStructOrClassName.getCount();
+size_t count = paramBinding.getCount();
 ```
 Returns the number of parameters in this binding. Returns the count (`size_t`).
 
 #### Method getParam
 
 ```cpp
-MicroParam &param = myStructOrClassName.getParam();
+MicroParam &param = paramBinding.getParam();
 ```
 Returns the first parameter in this binding. Returns the parameter (`MicroParam &`).
 
 ```cpp
-MicroParam &param = myStructOrClassName.getParam( index);
+MicroParam &param = paramBinding.getParam( index);
 ```
 Returns the parameter at the given index. `index` (`size_t`) is the index of the parameter. Returns the parameter (`MicroParam &`).
 
 #### Method matchesAddress
 
 ```cpp
-bool match = myStructOrClassName.matchesAddress( addr);
+bool match = paramBinding.matchesAddress( addr);
 ```
 Checks if the binding's address matches the given string. `addr` (`const char *`) is the OSC address to compare. Returns `true` if the addresses match.
 
 ```cpp
-bool match = myStructOrClassName.matchesAddress( hash);
+bool match = paramBinding.matchesAddress( hash);
 ```
 Checks if the binding's address hash matches the given hash. `hash` (`uint32_t`) is the hash to compare. Returns `true` if the hashes match.
 
 #### Method matchesTypeTags
 
 ```cpp
-bool match = myStructOrClassName.matchesTypeTags( hash);
+bool match = paramBinding.matchesTypeTags( hash);
 ```
 Checks if the type tags hash matches the given hash. `hash` (`uint32_t`) is the hash to compare. Returns `true` if the hashes match.
 
 ```cpp
-bool match = myStructOrClassName.matchesTypeTags( tags);
+bool match = paramBinding.matchesTypeTags( tags);
 ```
 Checks if the type tags match the given string. `tags` (`const char *`) is the type tags to compare. Returns `true` if the type tags match.
+
 
