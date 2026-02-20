@@ -26,20 +26,20 @@ MicroParamInt int0(2, -127, 127);
 MicroParamInt int1(400, 1, 2000);
 MicroParam* twoInts[] = { &int0, &int1 };
 
-MicroParamBindOsc inputs[] = {
+MicroParamOscBind inputs[] = {
     {"/input/a", "i", input_a},
     {"/input/b", "i", input_b},
     {"/twoInts", "ii", twoInts},
 };
-const size_t inputsCount = sizeof(inputs) / sizeof(MicroParamBindOsc);
+const size_t inputsCount = sizeof(inputs) / sizeof(MicroParamOscBind);
 
 MicroParamInt output_value(127, 0, 255);
 
-MicroParamBindOsc outputs[] = {
+MicroParamOscBind outputs[] = {
     {"/output/value", "i", output_value},
     {"/twoInts", "ii", twoInts},
 };
-const size_t outputsCount = sizeof(outputs) / sizeof(MicroParamBindOsc);
+const size_t outputsCount = sizeof(outputs) / sizeof(MicroParamOscBind);
 
 
 // FUNCTION THAT WILL BE CALLED WHEN AN OSC MESSAGE IS RECEIVED:
