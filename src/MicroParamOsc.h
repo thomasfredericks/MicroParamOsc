@@ -97,12 +97,12 @@ public:
     /// Checks if the binding's address hash matches the given hash
     /// @param hash Hash to compare (`uint32_t`)
     /// @return True if hashes match
-    bool matchesAddress(uint32_t hash) const { return addressHash_ == hash; }
+    bool matchesAddressHash(uint32_t hash) const { return addressHash_ == hash; }
 
     /// Checks if the type tags hash matches the given hash
     /// @param hash Hash to compare (`uint32_t`)
     /// @return True if hashes match
-    bool matchesTypeTags(uint32_t hash) const { return typeTagsHash_ == hash; }
+    bool matchesTypeTagsHash(uint32_t hash) const { return typeTagsHash_ == hash; }
 
     /// Checks if the type tags match the given string
     /// @param tags OSC type tags to compare (`const char *`)
@@ -117,41 +117,93 @@ public:
 /// @param bindings Array of bindings (`MicroParamOscBind *`)
 /// @param bindingsCount Number of bindings (`size_t`)
 /// @return True if a binding was updated successfully
-bool microParamOscDispatch(MicroOscMessage &message, MicroParamOscBind *bindings, size_t bindingsCount)
+bool microParamOscDispatch(MicroOscMessage &message,
+                           MicroParamOscBind *bindings,
+                           size_t bindingsCount)
 {
     const char *address = message.getOscAddress();
     const uint32_t addrHash = MicroParamOscBind::generateHash(address);
-    const char *typeTags = message.getTypeTags();
-    const uint32_t typeHash = MicroParamOscBind::generateHash(typeTags);
 
-    for (size_t i = 0; i < bindingsCount; i++)
+    const char *oscTypeTags = message.getTypeTags();
+    const uint32_t oscTypeHash = MicroParamOscBind::generateHash(oscTypeTags);
+
+    for (size_t b = 0; b < bindingsCount; ++b)
     {
-        MicroParamOscBind &binding = bindings[i];
+        MicroParamOscBind &binding = bindings[b];
 
-        if (binding.matchesAddress(addrHash) && binding.matchesTypeTags(typeHash))
+        if (!binding.matchesAddressHash(addrHash) ||
+            !binding.matchesTypeTagsHash(oscTypeHash))
+            continue;
+
+        for (size_t i = 0; i < binding.getCount(); ++i)
         {
-            for (size_t i = 0; i < binding.getCount(); i++)
+            MicroParam &param = binding.getParam(i);
+            char oscTag = oscTypeTags[i];
+
+            switch (oscTag)
             {
-                switch (typeTags[i])
-                {
-                case 'i':
-                    binding.getParam(i).setInt(message.nextAsInt());
-                    break;
-                case 'f':
-                    binding.getParam(i).setFloat(message.nextAsFloat());
-                    break;
-                case 's':
-                    binding.getParam(i).setString(message.nextAsString());
-                    break;
-                default:
-                    return false;
-                }
+            case 'i':
+                // if (param.getType() == MicroParam::Type::Enum ||
+                //     param.getType() == MicroParam::Type::Int ||
+                //     param.getType() == MicroParam::Type::Byte)
+                // {
+                    param.setInt(message.nextAsInt());
+                // }
+                // else
+                // {
+                //     return false;
+                // }
+                break;
+
+            case 'f':
+                // if (param.getType() == MicroParam::Type::Float ||
+                //     param.getType() == MicroParam::Type::Int)
+                // {
+                    param.setFloat(message.nextAsFloat());
+                // }
+                // else
+                // {
+                //     return false;
+                // }
+                break;
+
+            case 's':
+                // if (param.getType() == MicroParam::Type::String ||
+                //     param.getType() == MicroParam::Type::Enum)
+                // {
+                    param.setString(message.nextAsString());
+                // }
+                // else
+                // {
+                //     return false;
+                // }
+                break;
+
+            case 'b': // blob / array
+                // if (param.getType() == MicroParam::Type::Blob)
+                // {
+                    const uint8_t *data;
+                    uint32_t length;
+                    message.nextAsBlob(data, length);
+                    param.setBlob(data, length);
+                // }
+                // else
+                // {
+                //     return false;
+                // }
+                break;
+
+            default:
+                return false;
             }
-            return true;
         }
+
+        return true; // binding matched and applied
     }
+
     return false;
 }
+
 
 /// Sends a single binding's parameters via OSC
 /// @param osc OSC instance (`MicroOsc &`)
@@ -159,32 +211,46 @@ bool microParamOscDispatch(MicroOscMessage &message, MicroParamOscBind *bindings
 void microParamOscSend(MicroOsc &osc, MicroParamOscBind &binding)
 {
     const char *address = binding.getAddress();
-    size_t count = binding.getCount();
     const char *tags = binding.getTypeTags();
-    
+    size_t count = binding.getCount();
+
     osc.messageBegin(address, tags);
+
     for (size_t i = 0; i < count; ++i)
     {
-        char tag = tags[i];
         MicroParam &param = binding.getParam(i);
+        char tag = tags[i];
 
         switch (tag)
         {
         case 'i':
             osc.messageAddInt(param.getInt());
             break;
+
         case 'f':
             osc.messageAddFloat(param.getFloat());
             break;
+
         case 's':
             osc.messageAddString(param.getString());
             break;
+
+        case 'b':
+        {
+            const uint8_t *data = param.getBlobData();
+            uint32_t length = param.getLength();
+            osc.messageAddBlob(data, length);
+            break;
+        }
+
         default:
             break;
         }
     }
+
     osc.messageEnd();
 }
+
 
 /// Sends multiple bindings via OSC
 /// @param osc OSC instance (`MicroOsc &`)
