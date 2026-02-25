@@ -26,10 +26,19 @@ MicroParamInt int0(2, -127, 127);
 MicroParamInt int1(400, 1, 2000);
 MicroParam* twoInts[] = { &int0, &int1 };
 
+char stringBuffer[20] = "hello";
+MicroParamString stringParam(stringBuffer, sizeof(stringBuffer));
+
+uint8_t blobBuffer[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+MicroParamBlob blobParam(blobBuffer, sizeof(blobBuffer), sizeof(blobBuffer));
+
+
 MicroParamOscBind inputs[] = {
     {"/input/a", "i", input_a},
     {"/input/b", "i", input_b},
     {"/twoInts", "ii", twoInts},
+    {"/string", "s", stringParam},
+    {"/blob", "b", blobParam},
 };
 const size_t inputsCount = sizeof(inputs) / sizeof(MicroParamOscBind);
 
