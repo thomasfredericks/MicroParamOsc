@@ -183,8 +183,7 @@ bool microParamOscDispatch(MicroOscMessage &message,
                 // if (param.getType() == MicroParam::Type::Blob)
                 // {
                     const uint8_t *data;
-                    uint32_t length;
-                    message.nextAsBlob(data, length);
+                    uint32_t length = message.nextAsBlob(&data);
                     param.setBlob(data, length);
                 // }
                 // else
@@ -237,8 +236,8 @@ void microParamOscSend(MicroOsc &osc, MicroParamOscBind &binding)
 
         case 'b':
         {
-            const uint8_t *data = param.getBlobData();
-            uint32_t length = param.getLength();
+            uint8_t *data;
+            size_t length = param.getBlob(&data);
             osc.messageAddBlob(data, length);
             break;
         }
