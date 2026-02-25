@@ -88,7 +88,7 @@ void loop()
 
         microParamOscSend(myOsc, outputs, outputsCount);
 
-        myOsc.sendInt("/a0", analogRead(A0));
+        myOsc.sendInt("/a0", analogRead(0));
 
     }
 }
