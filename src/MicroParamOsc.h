@@ -9,11 +9,11 @@
 class MicroParamOscBind
 {
 private:
-    const char *address_;        ///< OSC address for this binding
-    uint32_t addressHash_;       ///< Hash of the OSC address for fast matching
+    const char *address_;  ///< OSC address for this binding
+    uint32_t addressHash_; ///< Hash of the OSC address for fast matching
 
-    const char *typeTags_;       ///< OSC type tags describing parameter types
-    uint32_t typeTagsHash_;      ///< Hash of the type tags for fast matching
+    const char *typeTags_;  ///< OSC type tags describing parameter types
+    uint32_t typeTagsHash_; ///< Hash of the type tags for fast matching
 
     MicroParam *singleParam_[1]; ///< Storage for a single parameter
     MicroParam **params_;        ///< Pointer to array of parameters
@@ -147,7 +147,7 @@ bool microParamOscDispatch(MicroOscMessage &message,
                 //     param.getType() == MicroParam::Type::Int ||
                 //     param.getType() == MicroParam::Type::Byte)
                 // {
-                    param.setInt(message.nextAsInt());
+                param.setInt(message.nextAsInt());
                 // }
                 // else
                 // {
@@ -159,7 +159,7 @@ bool microParamOscDispatch(MicroOscMessage &message,
                 // if (param.getType() == MicroParam::Type::Float ||
                 //     param.getType() == MicroParam::Type::Int)
                 // {
-                    param.setFloat(message.nextAsFloat());
+                param.setFloat(message.nextAsFloat());
                 // }
                 // else
                 // {
@@ -171,7 +171,7 @@ bool microParamOscDispatch(MicroOscMessage &message,
                 // if (param.getType() == MicroParam::Type::String ||
                 //     param.getType() == MicroParam::Type::Enum)
                 // {
-                    param.setString(message.nextAsString());
+                param.setString(message.nextAsString());
                 // }
                 // else
                 // {
@@ -183,16 +183,16 @@ bool microParamOscDispatch(MicroOscMessage &message,
             {
                 // if (param.getType() == MicroParam::Type::Blob)
                 // {
-                    const uint8_t *data;
-                    uint32_t length = message.nextAsBlob(&data);
-                    param.setBlob(data, length);
+                const uint8_t *data;
+                uint32_t length = message.nextAsBlob(&data);
+                param.setBlob(data, length);
                 // }
                 // else
                 // {
                 //     return false;
                 // }
-                }
-                break;
+            }
+            break;
 
             default:
                 return false;
@@ -204,7 +204,6 @@ bool microParamOscDispatch(MicroOscMessage &message,
 
     return false;
 }
-
 
 /// Sends a single binding's parameters via OSC
 /// @param osc OSC instance (`MicroOsc &`)
@@ -251,7 +250,6 @@ void microParamOscSend(MicroOsc &osc, MicroParamOscBind &binding)
 
     osc.messageEnd();
 }
-
 
 /// Sends multiple bindings via OSC
 /// @param osc OSC instance (`MicroOsc &`)
