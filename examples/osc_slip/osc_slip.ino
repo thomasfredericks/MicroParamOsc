@@ -45,8 +45,7 @@ const size_t inputsCount = sizeof(inputs) / sizeof(MicroParamOscBind);
 MicroParamInt output_value(127, 0, 255);
 
 MicroParamOscBind outputs[] = {
-    {"/output/value", "i", output_value},
-    {"/twoInts", "ii", twoInts},
+    {"/output/value", "i", output_value}
 };
 const size_t outputsCount = sizeof(outputs) / sizeof(MicroParamOscBind);
 
