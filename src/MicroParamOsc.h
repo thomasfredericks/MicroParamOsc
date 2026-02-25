@@ -180,6 +180,7 @@ bool microParamOscDispatch(MicroOscMessage &message,
                 break;
 
             case 'b': // blob / array
+            {
                 // if (param.getType() == MicroParam::Type::Blob)
                 // {
                     const uint8_t *data;
@@ -190,6 +191,7 @@ bool microParamOscDispatch(MicroOscMessage &message,
                 // {
                 //     return false;
                 // }
+                }
                 break;
 
             default:
